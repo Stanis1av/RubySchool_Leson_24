@@ -8,6 +8,7 @@ get '/' do
 end
 
 get '/about' do
+  @error = "Somthing wrong!!!"
   erb :about
 end
 
@@ -46,6 +47,10 @@ post '/visit' do
   @hairdresser = params[:hairdresser]
   @color = params[:color]
 
+  if @username == '' || @phone == '' || @datetime == ''
+    @error = "Введены пустые значения! Заполните поля!"
+    return erb :visit
+  end
   client = File.open './public/client.txt', 'a'
   client.write "Name: #{@username}, phone: #{@phone}, time: #{@datetime}\nHairdresser: #{@hairdresser}\nColor: #{@color}\n"
   client.close
