@@ -49,12 +49,13 @@ post '/visit' do
 
   hh = { username: 'Введите имя', phone: 'Ввелите телефон',
          datetime: 'Введите дату и время', }
-  hh.each do |key, value|
-    if params[key] == ''
-      @error = hh[key]
-      return erb :visit
-    end
+
+  @error = hh.select {|key,_| params[key] == ""}.values.join(", ")
+
+  if @error != ''
+    return erb :visit
   end
+
   client = File.open './public/client.txt', 'a'
   client.write "Name: #{@username}, phone: #{@phone}, time: #{@datetime}\nHairdresser: #{@hairdresser}\nColor: #{@color}\n"
   client.close
